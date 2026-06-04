@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", {
 exports.useBottomSheetReactions = void 0;
 var _reactNativeReanimated = require("react-native-reanimated");
 var _reactNativeWorklets = require("react-native-worklets");
+var _resolveAnimationConfig = require("../utils/resolveAnimationConfig");
 var _animationMath = require("../utils/animationMath");
 var _snapPointMath = require("../utils/snapPointMath");
 const useBottomSheetReactions = ({
@@ -22,9 +23,11 @@ const useBottomSheetReactions = ({
   currentSnapIndex,
   topSnapIndex
 }) => {
-  const duration = animationConfig?.duration ?? 250;
-  const openEasing = animationConfig?.openEasing ?? _reactNativeReanimated.Easing.out(_reactNativeReanimated.Easing.cubic);
-  const snapEasing = animationConfig?.snapEasing ?? _reactNativeReanimated.Easing.inOut(_reactNativeReanimated.Easing.ease);
+  const {
+    duration,
+    openEasing,
+    snapEasing
+  } = (0, _resolveAnimationConfig.resolveAnimationConfig)(animationConfig);
 
   // Handle dynamic sizing opening animation when content height gets measured
   (0, _reactNativeReanimated.useAnimatedReaction)(() => {

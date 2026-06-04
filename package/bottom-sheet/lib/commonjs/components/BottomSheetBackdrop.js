@@ -7,7 +7,6 @@ exports.BottomSheetBackdrop = void 0;
 var _react = _interopRequireDefault(require("react"));
 var _reactNative = require("react-native");
 var _reactNativeReanimated = _interopRequireDefault(require("react-native-reanimated"));
-var _ThemeContext = require("../theme/ThemeContext");
 var _jsxRuntime = require("react/jsx-runtime");
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 /**
@@ -17,10 +16,9 @@ const BottomSheetBackdrop = exports.BottomSheetBackdrop = /*#__PURE__*/_react.de
   onPress,
   animatedStyle,
   renderBackdrop,
-  theme: themeOverride,
+  theme,
   style: styleOverrides
 }) => {
-  const contextTheme = (0, _ThemeContext.useBottomSheetTheme)();
   if (renderBackdrop) {
     return /*#__PURE__*/(0, _jsxRuntime.jsx)(_jsxRuntime.Fragment, {
       children: renderBackdrop({
@@ -29,31 +27,11 @@ const BottomSheetBackdrop = exports.BottomSheetBackdrop = /*#__PURE__*/_react.de
       })
     });
   }
-  const resolvedTheme = {
-    ...contextTheme,
-    ...themeOverride,
-    colors: {
-      ...contextTheme.colors,
-      ...themeOverride?.colors
-    },
-    radius: {
-      ...contextTheme.radius,
-      ...themeOverride?.radius
-    },
-    spacing: {
-      ...contextTheme.spacing,
-      ...themeOverride?.spacing
-    },
-    sizing: {
-      ...contextTheme.sizing,
-      ...themeOverride?.sizing
-    }
-  };
   return /*#__PURE__*/(0, _jsxRuntime.jsxs)(_jsxRuntime.Fragment, {
     children: [/*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNativeReanimated.default.View, {
       pointerEvents: "none",
       style: [_reactNative.StyleSheet.absoluteFill, styles.backdrop, {
-        backgroundColor: resolvedTheme.colors.backdrop
+        backgroundColor: theme.colors.backdrop
       }, styleOverrides?.backdrop, animatedStyle]
     }), /*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.Pressable, {
       onPress: onPress,

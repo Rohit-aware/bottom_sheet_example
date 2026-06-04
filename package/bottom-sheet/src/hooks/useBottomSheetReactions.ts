@@ -1,5 +1,6 @@
-import { Easing, useAnimatedReaction, withTiming } from 'react-native-reanimated';
+import { useAnimatedReaction, withTiming } from 'react-native-reanimated';
 import { scheduleOnRN } from 'react-native-worklets';
+import { resolveAnimationConfig } from '../utils/resolveAnimationConfig';
 import type { BottomSheetAnimationConfig } from '../types/props';
 import { getTimingConfig } from '../utils/animationMath';
 import { getBottomSheetSnapPointTranslateY } from '../utils/snapPointMath';
@@ -33,9 +34,7 @@ export const useBottomSheetReactions = ({
   currentSnapIndex,
   topSnapIndex,
 }: UseBottomSheetReactionsProps) => {
-  const duration = animationConfig?.duration ?? 250;
-  const openEasing = animationConfig?.openEasing ?? Easing.out(Easing.cubic);
-  const snapEasing = animationConfig?.snapEasing ?? Easing.inOut(Easing.ease);
+  const { duration, openEasing, snapEasing } = resolveAnimationConfig(animationConfig);
 
   // Handle dynamic sizing opening animation when content height gets measured
   useAnimatedReaction(

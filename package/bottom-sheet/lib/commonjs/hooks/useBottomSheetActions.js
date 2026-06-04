@@ -7,6 +7,7 @@ exports.useBottomSheetActions = void 0;
 var _reactNative = require("react-native");
 var _reactNativeReanimated = require("react-native-reanimated");
 var _reactNativeWorklets = require("react-native-worklets");
+var _resolveAnimationConfig = require("../utils/resolveAnimationConfig");
 var _animationMath = require("../utils/animationMath");
 var _snapPointMath = require("../utils/snapPointMath");
 var _useStableCallback = require("./useStableCallback");
@@ -22,10 +23,12 @@ const useBottomSheetActions = ({
   onClose,
   showContent
 }) => {
-  const duration = animationConfig?.duration ?? 250;
-  const openEasing = animationConfig?.openEasing ?? _reactNativeReanimated.Easing.out(_reactNativeReanimated.Easing.cubic);
-  const closeEasing = animationConfig?.closeEasing ?? _reactNativeReanimated.Easing.out(_reactNativeReanimated.Easing.cubic);
-  const snapEasing = animationConfig?.snapEasing ?? _reactNativeReanimated.Easing.inOut(_reactNativeReanimated.Easing.ease);
+  const {
+    duration,
+    openEasing,
+    closeEasing,
+    snapEasing
+  } = (0, _resolveAnimationConfig.resolveAnimationConfig)(animationConfig);
   const finishClose = (0, _useStableCallback.useStableCallback)(callback => {
     onClose();
     if (callback) {
@@ -64,12 +67,10 @@ const useBottomSheetActions = ({
   });
   const closeFromGesture = (0, _useStableCallback.useStableCallback)(() => {
     _reactNative.Keyboard.dismiss();
-    requestAnimationFrame(() => {
-      isOpen.value = false;
-      isOpening.value = false;
-      sheetTranslateY.value = (0, _reactNativeReanimated.withTiming)(maxHeight, (0, _animationMath.getTimingConfig)(duration, closeEasing), finished => {
-        if (finished) (0, _reactNativeWorklets.scheduleOnRN)(onClose);
-      });
+    isOpen.value = false;
+    isOpening.value = false;
+    sheetTranslateY.value = (0, _reactNativeReanimated.withTiming)(maxHeight, (0, _animationMath.getTimingConfig)(duration, closeEasing), finished => {
+      if (finished) (0, _reactNativeWorklets.scheduleOnRN)(onClose);
     });
   });
   const close = (0, _useStableCallback.useStableCallback)(callback => {

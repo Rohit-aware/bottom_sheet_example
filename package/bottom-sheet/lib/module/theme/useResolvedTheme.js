@@ -1,6 +1,6 @@
 "use strict";
 
-import { useBottomSheetTheme } from '../theme/ThemeContext';
+import { useBottomSheetTheme } from './ThemeContext';
 export const useResolvedTheme = propsTheme => {
   const contextTheme = useBottomSheetTheme();
   return {

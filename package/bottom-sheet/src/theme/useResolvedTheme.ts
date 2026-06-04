@@ -1,5 +1,5 @@
-import { useBottomSheetTheme } from '../theme/ThemeContext';
-import type { BottomSheetTheme } from '../theme/types';
+import { useBottomSheetTheme } from './ThemeContext';
+import type { BottomSheetTheme } from './types';
 
 export const useResolvedTheme = (
   propsTheme?: Partial<BottomSheetTheme>,

@@ -1,15 +1,14 @@
 import React, { ReactNode } from 'react';
 import { Pressable, StyleSheet } from 'react-native';
 import Animated from 'react-native-reanimated';
-import { useBottomSheetTheme } from '../theme/ThemeContext';
 import type { BottomSheetTheme } from '../theme/types';
 import type { BottomSheetStyleOverrides } from '../types/props';
 
 export interface BottomSheetBackdropProps {
   onPress: () => void;
-  animatedStyle: any;
-  renderBackdrop?: (props: { onPress: () => void; animatedStyle: any }) => ReactNode;
-  theme?: Partial<BottomSheetTheme>;
+  animatedStyle: object;
+  renderBackdrop?: (props: { onPress: () => void; animatedStyle: object }) => ReactNode;
+  theme: BottomSheetTheme;
   style?: BottomSheetStyleOverrides;
 }
 
@@ -21,35 +20,12 @@ export const BottomSheetBackdrop = React.memo(
     onPress,
     animatedStyle,
     renderBackdrop,
-    theme: themeOverride,
+    theme,
     style: styleOverrides,
   }: BottomSheetBackdropProps) => {
-    const contextTheme = useBottomSheetTheme();
-
     if (renderBackdrop) {
       return <>{renderBackdrop({ onPress, animatedStyle })}</>;
     }
-
-    const resolvedTheme: BottomSheetTheme = {
-      ...contextTheme,
-      ...themeOverride,
-      colors: {
-        ...contextTheme.colors,
-        ...themeOverride?.colors,
-      },
-      radius: {
-        ...contextTheme.radius,
-        ...themeOverride?.radius,
-      },
-      spacing: {
-        ...contextTheme.spacing,
-        ...themeOverride?.spacing,
-      },
-      sizing: {
-        ...contextTheme.sizing,
-        ...themeOverride?.sizing,
-      },
-    };
 
     return (
       <>
@@ -58,7 +34,7 @@ export const BottomSheetBackdrop = React.memo(
           style={[
             StyleSheet.absoluteFill,
             styles.backdrop,
-            { backgroundColor: resolvedTheme.colors.backdrop },
+            { backgroundColor: theme.colors.backdrop },
             styleOverrides?.backdrop,
             animatedStyle,
           ]}
