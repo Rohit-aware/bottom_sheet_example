@@ -1,18 +1,20 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useMemo } from 'react';
 import { StyleSheet, KeyboardAvoidingView, Platform } from 'react-native';
 import Animated from 'react-native-reanimated';
-import { GestureDetector } from 'react-native-gesture-handler';
+import { GestureDetector, type PanGesture } from 'react-native-gesture-handler';
 import { BottomSheetHandle } from './BottomSheetHandle';
 import { BottomSheetContent } from './BottomSheetContent';
 import type { BottomSheetTheme } from '../theme/types';
 import type { BottomSheetStyleOverrides, BottomSheetRenderProps } from '../types/props';
-import type { UseBottomSheetSetupResult } from '../hooks/useBottomSheetSetup';
+import type { UseBottomSheetLayoutResult } from '../hooks/useBottomSheetLayout';
+import type { UseBottomSheetAnimationResult } from '../hooks/useBottomSheetAnimation';
+import type { UseBottomSheetControllerResult } from '../hooks/useBottomSheetController';
 
 export interface BottomSheetViewProps {
   theme: BottomSheetTheme;
-  layout: UseBottomSheetSetupResult['layout'];
-  animation: UseBottomSheetSetupResult['animation'];
-  controller: UseBottomSheetSetupResult['controller'];
+  layout: UseBottomSheetLayoutResult;
+  animation: UseBottomSheetAnimationResult;
+  controller: UseBottomSheetControllerResult;
   handlePanGesture: any;
   contentPanGesture: any;
   style?: BottomSheetStyleOverrides;
@@ -35,13 +37,13 @@ export const BottomSheetView = React.memo(({
   children,
   avoidKeyboard = false,
 }: BottomSheetViewProps) => {
-  const controllerProps = {
+  const controllerProps = useMemo(() => ({
     close: controller.close,
     snapToIndex: controller.snapToIndex,
     expand: () => controller.snapToIndex(layout.resolvedSnapPoints.value.length - 1),
     collapse: () => controller.snapToIndex(0),
     currentSnapIndex: controller.currentSnapIndex,
-  };
+  }), [controller.close, controller.snapToIndex, controller.currentSnapIndex, layout.resolvedSnapPoints]);
 
   const content = (
     <BottomSheetContent

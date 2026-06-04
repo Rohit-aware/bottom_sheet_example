@@ -1,12 +1,14 @@
 import React, { ReactNode } from 'react';
 import type { BottomSheetTheme } from '../theme/types';
 import type { BottomSheetStyleOverrides, BottomSheetRenderProps } from '../types/props';
-import type { UseBottomSheetSetupResult } from '../hooks/useBottomSheetSetup';
+import type { UseBottomSheetLayoutResult } from '../hooks/useBottomSheetLayout';
+import type { UseBottomSheetAnimationResult } from '../hooks/useBottomSheetAnimation';
+import type { UseBottomSheetControllerResult } from '../hooks/useBottomSheetController';
 export interface BottomSheetViewProps {
     theme: BottomSheetTheme;
-    layout: UseBottomSheetSetupResult['layout'];
-    animation: UseBottomSheetSetupResult['animation'];
-    controller: UseBottomSheetSetupResult['controller'];
+    layout: UseBottomSheetLayoutResult;
+    animation: UseBottomSheetAnimationResult;
+    controller: UseBottomSheetControllerResult;
     handlePanGesture: any;
     contentPanGesture: any;
     style?: BottomSheetStyleOverrides;

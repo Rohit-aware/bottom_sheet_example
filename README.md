@@ -1,97 +1,174 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# 🚀 @rn-lab/bottom-sheet
 
-# Getting Started
+A premium, highly-optimized, framework-agnostic bottom sheet component for **React Native**, built on top of **React Native Reanimated v3** and **Gesture Handler v2**.
 
-> **Note**: Make sure you have completed the [Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment) guide before proceeding.
+[![npm version](https://img.shields.io/badge/npm-v1.0.0-blue.svg?style=flat-square)](https://www.npmjs.com/)
+[![platform](https://img.shields.io/badge/platform-ios%20%7C%20android-lightgrey.svg?style=flat-square)](#)
+[![license](https://img.shields.io/badge/license-MIT-green.svg?style=flat-square)](LICENSE)
+[![sideeffects](https://img.shields.io/badge/sideeffects-false-brightgreen.svg?style=flat-square)](#)
+[![size](https://img.shields.io/badge/size-%3C20%20KB-blueviolet.svg?style=flat-square)](#)
 
-## Step 1: Start Metro
+---
 
-First, you will need to run **Metro**, the JavaScript build tool for React Native.
+## ✨ Key Features & Performance Advantages
 
-To start the Metro dev server, run the following command from the root of your React Native project:
+Why choose `@rn-lab/bottom-sheet` over `@gorhom/bottom-sheet` or other alternatives?
 
-```sh
+* ⚡ **Zero-Jank / 60+ FPS**: Built natively with Reanimated v3 shared values. Animations run completely on the UI thread, bypassing the React Native bridge during active gestures.
+* 📦 **Ultra-Lightweight & Tree-Shakeable**: Configured with `sideEffects: false` and strict module exports. It has a tiny footprint and tree-shakes unused components (like backdrops/handles) cleanly.
+* 🔒 **Solid Public API Stability**: Features a secure `exports` conditional map. Internal hooks (such as layout computations, state machinery, gestures) are fully encapsulated and hidden. Refactors never leak or break your application.
+* 🎨 **Integrated Theme Engine**: Comes with a fully reactive design system (`BottomSheetThemeProvider` + `useResolvedTheme`) for out-of-the-box Dark/Light mode transitions with zero-overhead memoization.
+* ⌨️ **Keyboard Aware**: Smoothly offsets in response to system keyboards, adjusting height boundaries dynamically.
+
+---
+
+## 📦 Installation
+
+Install the package via your favorite package manager:
+
+```bash
+# Using bun (recommended)
+bun add @rn-lab/bottom-sheet
+
 # Using npm
-npm start
-
-# OR using Yarn
-yarn start
+npm install @rn-lab/bottom-sheet
 ```
 
-## Step 2: Build and run your app
+### Peer Dependencies
+Ensure you have the following packages installed in your project:
 
-With Metro running, open a new terminal window/pane from the root of your React Native project, and use one of the following commands to build and run your Android or iOS app:
-
-### Android
-
-```sh
-# Using npm
-npm run android
-
-# OR using Yarn
-yarn android
+```json
+"peerDependencies": {
+  "react": ">=18.0.0",
+  "react-native": ">=0.73.0",
+  "react-native-gesture-handler": ">=2.18.0",
+  "react-native-reanimated": ">=3.16.0",
+  "react-native-safe-area-context": ">=5.0.0",
+  "react-native-worklets": ">=1.0.0"
+}
 ```
 
-### iOS
+---
 
-For iOS, remember to install CocoaPods dependencies (this only needs to be run on first clone or after updating native deps).
+## 🚀 Quick Usage Example
 
-The first time you create a new project, run the Ruby bundler to install CocoaPods itself:
+Here is a clean, modern implementation demonstrating backdrop dimming, dynamic snap points, and imperative ref control:
 
-```sh
-bundle install
+```tsx
+import React, { useRef, useState, useCallback } from 'react';
+import { View, Text, StyleSheet, Button } from 'react-native';
+import { 
+  BottomSheet, 
+  BottomSheetRef, 
+  BottomSheetBackdrop 
+} from '@rn-lab/bottom-sheet';
+
+export default function App() {
+  const [visible, setVisible] = useState(false);
+  const bottomSheetRef = useRef<BottomSheetRef>(null);
+
+  const openSheet = () => setVisible(true);
+  const closeSheet = () => bottomSheetRef.current?.close();
+
+  // Reference-stable backdrop rendering callback
+  const renderBackdrop = useCallback(
+    (props: any) => <BottomSheetBackdrop {...props} />,
+    []
+  );
+
+  return (
+    <View style={styles.container}>
+      <Button title="Open Bottom Sheet" onPress={openSheet} />
+
+      <BottomSheet
+        ref={bottomSheetRef}
+        visible={visible}
+        snapPoints={['30%', '60%', '90%']}
+        onClose={() => setVisible(false)}
+        renderBackdrop={renderBackdrop}
+        lazy={true} // Defers children rendering until animation completes
+      >
+        <View style={styles.content}>
+          <Text style={styles.title}>Welcome to @rn-lab/bottom-sheet 🎉</Text>
+          <Text style={styles.text}>Drag me or click buttons to snap!</Text>
+          <Button title="Snap to 90%" onPress={() => bottomSheetRef.current?.snapToIndex(2)} />
+          <Button title="Close Sheet" onPress={closeSheet} />
+        </View>
+      </BottomSheet>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#f5f5f5',
+  },
+  content: {
+    padding: 24,
+    alignItems: 'center',
+  },
+  title: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 8,
+  },
+  text: {
+    fontSize: 14,
+    color: '#666',
+    marginBottom: 24,
+  },
+});
 ```
 
-Then, and every time you update your native dependencies, run:
+---
 
-```sh
-bundle exec pod install
-```
+## 🛠️ Performance Guidelines & Best Practices
 
-For more information, please visit [CocoaPods Getting Started guide](https://guides.cocoapods.org/using/getting-started.html).
+To maintain 60/120 FPS animations, adhere to the following library guidelines:
 
-```sh
-# Using npm
-npm run ios
+> [!IMPORTANT]
+> **Avoid Inline Objects in Props**: Do not pass inline objects or arrow functions directly into style or backdrop overrides. Use `useMemo` or `useCallback` to prevent breaking `React.memo` structures.
 
-# OR using Yarn
-yarn ios
-```
+> [!TIP]
+> **Use the `lazy` Prop for Heavy Views**: If your bottom sheet contains charts, maps, or heavy lists, enable `lazy={true}`. This defers the expensive React rendering of children until the open animation has fully completed.
 
-If everything is set up correctly, you should see your new app running in the Android Emulator, iOS Simulator, or your connected device.
+> [!WARNING]
+> **Do Not Trigger React State Updates in Animation Hooks**: Avoid calling `setState` inside gesture worklets. If you need coordination, use Reanimated's `useDerivedValue` which executes completely on the UI thread without crossing the React Native bridge.
 
-This is one way to run your app — you can also build it directly from Android Studio or Xcode.
+---
 
-## Step 3: Modify your app
+## 📖 API Reference
 
-Now that you have successfully run the app, let's make changes!
+### BottomSheet Props
 
-Open `App.tsx` in your text editor of choice and make some changes. When you save, your app will automatically update and reflect these changes — this is powered by [Fast Refresh](https://reactnative.dev/docs/fast-refresh).
+| Prop | Type | Default | Description |
+|---|---|---|---|
+| `visible` | `boolean` | `required` | Controls the visibility state of the sheet. |
+| `snapPoints` | `SnapPoint[]` | `required` | Height values. Accepts numbers (px) or percentages (e.g. `'50%'`). |
+| `onClose` | `() => void` | `required` | Callback fired when the sheet completes its close animation. |
+| `initialSnapIndex` | `number` | `0` | Snap index to focus on when opening. |
+| `lazy` | `boolean` | `false` | When true, delays children mounting until sheet is opened. |
+| `enableDynamicSizing` | `boolean` | `false` | Caps the lowest snap point height exactly to the sheet's content layout. |
+| `enableDragToClose` | `boolean` | `true` | Enables gesture swiping downward to dismiss the sheet. |
+| `enableBackdropDismiss`| `boolean` | `true` | Allows dismissing the sheet by tapping the backdrop area. |
+| `renderBackdrop` | `(props) => ReactNode` | `undefined` | Custom renderer to display a background dimming/blur overlay. |
+| `renderHandle` | `(props) => ReactNode` | `undefined` | Custom renderer for the top drag indicator handle. |
+| `theme` | `Partial<BottomSheetTheme>` | `undefined` | Style overrides for colors, radii, sizing, and spacing variables. |
+| `avoidKeyboard` | `boolean` | `false` | Automatically wraps the layout in a KeyboardAvoidingView. |
 
-When you want to forcefully reload, for example to reset the state of your app, you can perform a full reload:
+### Imperative Methods (`BottomSheetRef`)
 
-- **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Dev Menu**, accessed via <kbd>Ctrl</kbd> + <kbd>M</kbd> (Windows/Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (macOS).
-- **iOS**: Press <kbd>R</kbd> in iOS Simulator.
+*   `open()`: Displays the sheet and snaps to `initialSnapIndex`.
+*   `close(callback?: () => void)`: Slides the sheet down and triggers closing callbacks.
+*   `snapToIndex(index: number)`: Animates translation to a specific snap point.
+*   `expand()`: Snaps to the highest index.
+*   `collapse()`: Snaps to the lowest index (index 0).
 
-## Congratulations! :tada:
+---
 
-You've successfully run and modified your React Native App. :partying_face:
+## 📄 License
 
-### Now what?
-
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [docs](https://reactnative.dev/docs/getting-started).
-
-# Troubleshooting
-
-If you're having issues getting the above steps to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
-
-# Learn More
-
-To learn more about React Native, take a look at the following resources:
-
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+MIT © [RN Lab](https://github.com/)

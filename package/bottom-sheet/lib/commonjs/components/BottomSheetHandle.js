@@ -6,45 +6,21 @@ Object.defineProperty(exports, "__esModule", {
 exports.BottomSheetHandle = void 0;
 var _react = _interopRequireDefault(require("react"));
 var _reactNative = require("react-native");
-var _ThemeContext = require("../theme/ThemeContext");
 var _jsxRuntime = require("react/jsx-runtime");
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 /**
  * Drag handle component displayed at the top of the bottom sheet.
  */
 const BottomSheetHandle = exports.BottomSheetHandle = /*#__PURE__*/_react.default.memo(({
-  theme: themeOverride,
+  theme,
   style: styleOverrides
 }) => {
-  const contextTheme = (0, _ThemeContext.useBottomSheetTheme)();
-
-  // Resolve theme (override -> context -> default)
-  const resolvedTheme = {
-    ...contextTheme,
-    ...themeOverride,
-    colors: {
-      ...contextTheme.colors,
-      ...themeOverride?.colors
-    },
-    radius: {
-      ...contextTheme.radius,
-      ...themeOverride?.radius
-    },
-    spacing: {
-      ...contextTheme.spacing,
-      ...themeOverride?.spacing
-    },
-    sizing: {
-      ...contextTheme.sizing,
-      ...themeOverride?.sizing
-    }
-  };
   const {
     colors,
     radius,
     spacing,
     sizing
-  } = resolvedTheme;
+  } = theme;
   return /*#__PURE__*/(0, _jsxRuntime.jsx)(_reactNative.View, {
     style: [styles.handle, {
       backgroundColor: colors.handle,

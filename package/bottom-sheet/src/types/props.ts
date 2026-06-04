@@ -97,7 +97,7 @@ export interface BottomSheetProps {
    */
   renderBackdrop?: (props: {
     onPress: () => void;
-    animatedStyle: any;
+    animatedStyle: object;
   }) => ReactNode;
   /**
    * Inner content. Can be standard React elements or a render prop function.

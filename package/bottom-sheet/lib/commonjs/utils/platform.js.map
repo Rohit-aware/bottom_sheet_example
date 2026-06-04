@@ -1,1 +1,0 @@
-{"version":3,"names":["_reactNative","require","IS_ANDROID","exports","Platform","OS","IS_IOS"],"sourceRoot":"../../../src","sources":["utils/platform.ts"],"mappings":";;;;;;AAAA,IAAAA,YAAA,GAAAC,OAAA;AAEO,MAAMC,UAAU,GAAAC,OAAA,CAAAD,UAAA,GAAGE,qBAAQ,CAACC,EAAE,KAAK,SAAS;AAC5C,MAAMC,MAAM,GAAAH,OAAA,CAAAG,MAAA,GAAGF,qBAAQ,CAACC,EAAE,KAAK,KAAK","ignoreList":[]}

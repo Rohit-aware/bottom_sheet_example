@@ -1,6 +1,6 @@
 "use strict";
 
-import React from 'react';
+import React, { useMemo } from 'react';
 import { StyleSheet, KeyboardAvoidingView, Platform } from 'react-native';
 import Animated from 'react-native-reanimated';
 import { GestureDetector } from 'react-native-gesture-handler';
@@ -20,13 +20,13 @@ export const BottomSheetView = /*#__PURE__*/React.memo(({
   children,
   avoidKeyboard = false
 }) => {
-  const controllerProps = {
+  const controllerProps = useMemo(() => ({
     close: controller.close,
     snapToIndex: controller.snapToIndex,
     expand: () => controller.snapToIndex(layout.resolvedSnapPoints.value.length - 1),
     collapse: () => controller.snapToIndex(0),
     currentSnapIndex: controller.currentSnapIndex
-  };
+  }), [controller.close, controller.snapToIndex, controller.currentSnapIndex, layout.resolvedSnapPoints]);
   const content = /*#__PURE__*/_jsx(BottomSheetContent, {
     renderContent: controller.renderContent,
     enableDynamicSizing: enableDynamicSizing,

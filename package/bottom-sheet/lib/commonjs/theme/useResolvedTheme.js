@@ -4,7 +4,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.useResolvedTheme = void 0;
-var _ThemeContext = require("../theme/ThemeContext");
+var _ThemeContext = require("./ThemeContext");
 const useResolvedTheme = propsTheme => {
   const contextTheme = (0, _ThemeContext.useBottomSheetTheme)();
   return {

@@ -1,6 +1,7 @@
 import { Keyboard, Platform } from 'react-native';
-import { Easing, withTiming } from 'react-native-reanimated';
+import { withTiming } from 'react-native-reanimated';
 import { scheduleOnRN } from 'react-native-worklets';
+import { resolveAnimationConfig } from '../utils/resolveAnimationConfig';
 import type { BottomSheetAnimationConfig } from '../types/props';
 import { getTimingConfig } from '../utils/animationMath';
 import { getBottomSheetSnapPointTranslateY } from '../utils/snapPointMath';
@@ -31,10 +32,7 @@ export const useBottomSheetActions = ({
   onClose,
   showContent,
 }: UseBottomSheetActionsProps) => {
-  const duration = animationConfig?.duration ?? 250;
-  const openEasing = animationConfig?.openEasing ?? Easing.out(Easing.cubic);
-  const closeEasing = animationConfig?.closeEasing ?? Easing.out(Easing.cubic);
-  const snapEasing = animationConfig?.snapEasing ?? Easing.inOut(Easing.ease);
+  const { duration, openEasing, closeEasing, snapEasing } = resolveAnimationConfig(animationConfig);
 
   const finishClose = useStableCallback((callback?: () => void) => {
     onClose();
@@ -72,12 +70,10 @@ export const useBottomSheetActions = ({
 
   const closeFromGesture = useStableCallback(() => {
     Keyboard.dismiss();
-    requestAnimationFrame(() => {
-      isOpen.value = false;
-      isOpening.value = false;
-      sheetTranslateY.value = withTiming(maxHeight, getTimingConfig(duration, closeEasing), (finished) => {
-        if (finished) scheduleOnRN(onClose);
-      });
+    isOpen.value = false;
+    isOpening.value = false;
+    sheetTranslateY.value = withTiming(maxHeight, getTimingConfig(duration, closeEasing), (finished) => {
+      if (finished) scheduleOnRN(onClose);
     });
   });
 
