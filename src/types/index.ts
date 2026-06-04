@@ -1,0 +1,38 @@
+export type SheetType =
+  | 'notifications'
+  | 'settings'
+  | 'team'
+  | 'custom-handle'
+  | 'render-props'
+  | 'themed'
+  | 'form'
+  | 'dynamic-sizing'
+  | 'dismiss-config'
+  | null;
+
+export interface NotificationData {
+  id: string;
+  icon: string;
+  title: string;
+  subtitle: string;
+  time: string;
+  color: string;
+}
+
+export interface SettingsItemData {
+  icon: string;
+  label: string;
+  badge: string | null;
+}
+
+export type MemberStatus = 'online' | 'away' | 'offline';
+
+export interface TeamMemberData {
+  id: string;
+  name: string;
+  role: string;
+  status: MemberStatus;
+  avatar: string;
+}
+
+export type ButtonVariant = 'filled' | 'outline' | 'ghost';
