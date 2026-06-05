@@ -20,3 +20,11 @@ export { DynamicSizingSheet } from './dynamic-behavior/DynamicSizingSheet';
 export type { DynamicSizingSheetProps } from './dynamic-behavior/DynamicSizingSheet';
 export { DismissConfigSheet } from './dynamic-behavior/DismissConfigSheet';
 export type { DismissConfigSheetProps } from './dynamic-behavior/DismissConfigSheet';
+
+export { CheckoutSheet } from './stack/CheckoutSheet';
+export type { CheckoutSheetProps } from './stack/CheckoutSheet';
+
+export { FullscreenPlayerSheet } from './advanced/FullscreenPlayerSheet';
+export type { FullscreenPlayerSheetProps } from './advanced/FullscreenPlayerSheet';
+
+

@@ -8,7 +8,17 @@ export type SheetType =
   | 'form'
   | 'dynamic-sizing'
   | 'dismiss-config'
+  | 'checkout'
+  | 'fullscreen-player'
   | null;
+
+export interface CardData {
+  id: string;
+  type: 'visa' | 'mastercard' | 'applepay' | 'discover' | 'amex';
+  last4: string;
+  cardholderName: string;
+  expiry: string;
+}
 
 export interface NotificationData {
   id: string;

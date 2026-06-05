@@ -15,20 +15,33 @@ import {
   FormSheet,
   DynamicSizingSheet,
   DismissConfigSheet,
+  CheckoutSheet,
+  FullscreenPlayerSheet,
 } from '../components/sheets';
+import { useMusicPlayerState } from '../components/sheets/advanced/useMusicPlayerState';
+import { MiniPlayer } from '../components/sheets/advanced/MiniPlayer';
 
 export const HomeScreen = React.memo(() => {
   const insets = useSafeAreaInsets();
   const [activeSheet, setActiveSheet] = useState<SheetType>(null);
   const notifSheetRef = useRef<BottomSheetRef>(null);
+  const playerState = useMusicPlayerState();
 
   const openSheet = useCallback((type: SheetType) => {
+    if (type === 'fullscreen-player') {
+      playerState.setIsMiniPlayerActive(false);
+    }
     setActiveSheet(type);
-  }, []);
+  }, [playerState]);
 
   const closeSheet = useCallback(() => {
+    if (activeSheet === 'fullscreen-player') {
+      if (playerState.hasPlayedOnce) {
+        playerState.setIsMiniPlayerActive(true);
+      }
+    }
     setActiveSheet(null);
-  }, []);
+  }, [activeSheet, playerState]);
 
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>
@@ -155,6 +168,32 @@ export const HomeScreen = React.memo(() => {
           onPress={() => openSheet('dismiss-config')}
           tag="MODAL"
         />
+
+        <SectionHeader
+          title="Stacked Sheets"
+          subtitle="Multiple sheets opened on top of each other"
+        />
+        <ShowcaseCard
+          icon="🥞"
+          title="Checkout Flow"
+          subtitle="Cart Summary ➔ Payment Method ➔ Add Card"
+          accentColor={COLORS.pink}
+          onPress={() => openSheet('checkout')}
+          tag="STACK"
+        />
+
+        <SectionHeader
+          title="Fullscreen Modals"
+          subtitle="No drag handle or indicators • Fits entire screen"
+        />
+        <ShowcaseCard
+          icon="📺"
+          title="Music Player"
+          subtitle="100% height • Custom close control • No handle"
+          accentColor={COLORS.accentLight}
+          onPress={() => openSheet('fullscreen-player')}
+          tag="FULL"
+        />
       </ScrollView>
 
       <NotificationsSheet
@@ -194,6 +233,39 @@ export const HomeScreen = React.memo(() => {
         visible={activeSheet === 'dismiss-config'}
         onClose={closeSheet}
       />
+      <CheckoutSheet
+        visible={activeSheet === 'checkout'}
+        onClose={closeSheet}
+      />
+      <FullscreenPlayerSheet
+        visible={activeSheet === 'fullscreen-player'}
+        onClose={closeSheet}
+        isPlaying={playerState.isPlaying}
+        isLiked={playerState.isLiked}
+        currentTime={playerState.currentTime}
+        duration={playerState.duration}
+        progressPercentage={playerState.progressPercentage}
+        togglePlayPause={playerState.togglePlayPause}
+        toggleLiked={playerState.toggleLiked}
+        formatTime={playerState.formatTime}
+      />
+
+      {playerState.isMiniPlayerActive && (
+        <MiniPlayer
+          isPlaying={playerState.isPlaying}
+          isLiked={playerState.isLiked}
+          progressPercentage={playerState.progressPercentage}
+          trackTitle="Music Waves"
+          trackArtist="Arijit Singh"
+          onPress={() => {
+            playerState.setIsMiniPlayerActive(false);
+            openSheet('fullscreen-player');
+          }}
+          onPlayPausePress={playerState.togglePlayPause}
+          onLikePress={playerState.toggleLiked}
+          onDismiss={() => playerState.setIsMiniPlayerActive(false)}
+        />
+      )}
     </View>
   );
 });
