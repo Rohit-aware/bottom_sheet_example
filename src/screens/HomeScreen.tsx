@@ -5,21 +5,9 @@ import type { BottomSheetRef } from '@rn-lab/bottom-sheet';
 import { COLORS, RADIUS } from '../constants';
 import type { SheetType } from '../types';
 import { SectionHeader, ShowcaseCard } from '../components/common';
-import {
-  NotificationsSheet,
-  SettingsSheet,
-  TeamSheet,
-  CustomHandleSheet,
-  RenderPropsSheet,
-  ThemedSheet,
-  FormSheet,
-  DynamicSizingSheet,
-  DismissConfigSheet,
-  CheckoutSheet,
-  FullscreenPlayerSheet,
-} from '../components/sheets';
 import { useMusicPlayerState } from '../components/sheets/advanced/useMusicPlayerState';
 import { MiniPlayer } from '../components/sheets/advanced/MiniPlayer';
+import { NotificationsSheet, SettingsSheet, TeamSheet, CustomHandleSheet, RenderPropsSheet, ThemedSheet, FormSheet, DynamicSizingSheet, DismissConfigSheet, CheckoutSheet, FullscreenPlayerSheet, } from '../components/sheets';
 
 export const HomeScreen = React.memo(() => {
   const insets = useSafeAreaInsets();
@@ -100,7 +88,6 @@ export const HomeScreen = React.memo(() => {
           onPress={() => openSheet('team')}
           tag="REF"
         />
-
         <SectionHeader
           title="Custom Drag Handle"
           subtitle="Replace the default handle with custom icons"
@@ -134,7 +121,6 @@ export const HomeScreen = React.memo(() => {
           onPress={() => openSheet('themed')}
           tag="THEME"
         />
-
         <SectionHeader
           title="Keyboard Avoiding Test"
           subtitle="Form inputs to test keyboard avoidance"
@@ -147,7 +133,6 @@ export const HomeScreen = React.memo(() => {
           onPress={() => openSheet('form')}
           tag="KEYBOARD"
         />
-
         <SectionHeader
           title="Dynamic & Behavior Controls"
           subtitle="Dynamic height & persistence controls"
@@ -168,7 +153,6 @@ export const HomeScreen = React.memo(() => {
           onPress={() => openSheet('dismiss-config')}
           tag="MODAL"
         />
-
         <SectionHeader
           title="Stacked Sheets"
           subtitle="Multiple sheets opened on top of each other"
@@ -181,7 +165,6 @@ export const HomeScreen = React.memo(() => {
           onPress={() => openSheet('checkout')}
           tag="STACK"
         />
-
         <SectionHeader
           title="Fullscreen Modals"
           subtitle="No drag handle or indicators • Fits entire screen"
